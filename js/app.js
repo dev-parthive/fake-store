@@ -49,24 +49,23 @@ searchField.addEventListener('keypress',  async (event)=>{
         const allProducts =  await loadAllProducts();
         // console.log(allProducts)
         const foundProducts = allProducts.filter(product => product.category.includes(searchValue))
-        console.log(foundProducts)
+        // console.log(foundProducts)
         const prodcutsContainer =  document.getElementById('products-container');
         prodcutsContainer.textContent = ''
+        const notFound = document.getElementById('not-found');
+        notFound.textContent = ''
 
 
         // No prodcuts to show message 
         if(foundProducts.length === 0 ){
-            prodcutsContainer.innerHTML = `
-            
-            <h3 class="text-center" style="font-size: 40px; "> No products to show </h3>
-            
-            `
+            notFound.innerHTML = `<h2 class="font-2xl text-orange-500 text-center">Not Found</h2>`
+            return;
         }
 
         
         foundProducts.forEach(product => {
-            console.log(product)
-            const {category, image, title} = product
+            // console.log(product)
+            const {category, image, title , description} = product
 
             const div = document.createElement('div');
             div.innerHTML = `
@@ -76,7 +75,7 @@ searchField.addEventListener('keypress',  async (event)=>{
     <h2 class="card-title">${category}!</h2>
     <p>${title.length > 20 ? title.slice(0,20) + '....': title}</p>
     <div class="card-actions justify-end">
-      <button class="btn btn-primary">Show Details</button>
+    <label for="my-modal-3" class="btn btn-primary modal-button" onclick="showModal('${description}','${image}')">Show Details</label>
     </div>
   </div>
 </div>
@@ -86,3 +85,14 @@ searchField.addEventListener('keypress',  async (event)=>{
         });
     }
 })
+
+// modal 
+const showModal = (description, image)=>{
+    const modalBody = document.getElementById('modal-body');
+    modalBody.textContent = ''
+    modalBody.innerHTML = `
+    <img src="${image}" class="text-lg font-bold">
+    <p class="py-4">${description}</p>
+    
+    `
+}
